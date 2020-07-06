@@ -50,10 +50,7 @@ class MocapSimulatorNode:
         self.frame_delay = 1/float(self.frame_rate)
 
         self.fixed_frame_id = rospy.get_param('~fixed_frame_id', "mocap")
-        self.max_accel = rospy.get_param('max_accel', 10)
         self.model_list = rospy.get_param('model_list', [])
-
-        self.mocap_frame = 'mocap'
 
     #=====================================
     #     Setup ROS subscribers and
@@ -82,12 +79,12 @@ class MocapSimulatorNode:
                                              "vel_stamped_pub"  : rospy.Publisher(model+"/velocity", geometry_msgs.msg.TwistStamped, queue_size=100),
                                              "vel_stamped_msg"  : geometry_msgs.msg.TwistStamped() }})
             #init message headers
-            self.model_pub[model]["odom_msg"].header.frame_id = self.mocap_frame
+            self.model_pub[model]["odom_msg"].header.frame_id = self.fixed_frame_id
             self.model_pub[model]["odom_msg"].child_frame_id = model + "/base_link"
-            self.model_pub[model]["odom_child_tf"].header.frame_id = self.mocap_frame
+            self.model_pub[model]["odom_child_tf"].header.frame_id = self.fixed_frame_id
             self.model_pub[model]["odom_child_tf"].child_frame_id = model + "/base_link"
-            self.model_pub[model]["pose_stamped_msg"].header.frame_id = self.mocap_frame
-            self.model_pub[model]["vel_stamped_msg"].header.frame_id = model
+            self.model_pub[model]["pose_stamped_msg"].header.frame_id = self.fixed_frame_id
+            self.model_pub[model]["vel_stamped_msg"].header.frame_id = self.fixed_frame_id
 
         #------------------------------------------
         # Initialize Gazebo model state subscriber
