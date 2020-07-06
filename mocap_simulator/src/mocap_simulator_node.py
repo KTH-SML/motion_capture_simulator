@@ -51,6 +51,7 @@ class MocapSimulatorNode:
 
         self.fixed_frame_id = rospy.get_param('~fixed_frame_id', "mocap")
         self.model_list = rospy.get_param('model_list', [])
+        self.publish_tf = rospy.get_param('publish_tf', False)
 
     #=====================================
     #     Setup ROS subscribers and
@@ -160,7 +161,8 @@ class MocapSimulatorNode:
                         self.model_pub[model]["odom_pub"].publish(self.model_pub[model]["odom_msg"])
                         self.model_pub[model]["pose_stamped_pub"].publish(self.model_pub[model]["pose_stamped_msg"])
                         self.model_pub[model]["vel_stamped_pub"].publish(self.model_pub[model]["vel_stamped_msg"])
-                        #self.model_pub[model]["odom_child_tf_pub"].sendTransform(self.model_pub[model]["odom_child_tf"])
+                        if self.publish_tf:
+                            self.model_pub[model]["odom_child_tf_pub"].sendTransform(self.model_pub[model]["odom_child_tf"])
 
 #=====================================
 # Apply transform to a twist message 
