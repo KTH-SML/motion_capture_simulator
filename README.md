@@ -24,9 +24,6 @@ The fixed frame ID of the tf msgs for each subject. Note that the child frame id
 A vector of subjects of interest. Leave the vector empty if all subjects are to be tracked.
 LEAVING THE VECTOR EMPTY WILL ONLY TRACK NON-STATIC MODEL (according to the model properties in Gazebo). 
 
-`mocap_system` (`string`, `default: qualisys`)
-
-Mocap system name to be used in the published topic
 
 **Published Topics**
 
