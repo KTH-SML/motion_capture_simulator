@@ -50,11 +50,11 @@ class MocapSimulatorNode:
         self.frame_delay = 1/float(self.frame_rate)
 
         self.fixed_frame_id = rospy.get_param('~fixed_frame_id', "mocap")
-        self.model_list = rospy.get_param('model_list', [])
-        self.publish_tf = rospy.get_param('publish_tf', False)
+        self.model_list = rospy.get_param('~model_list', [])
+        self.publish_tf = rospy.get_param('~publish_tf', False)
 
         #Get mocap system name for publishing
-        self.mocap_system = rospy.get_param('mocap_system', "qualisys")
+        self.mocap_system = rospy.get_param('~mocap_system', "qualisys")
 
     #=====================================
     #     Setup ROS subscribers and
