@@ -71,13 +71,13 @@ class MocapSimulatorNode:
 
         for model in self.model_list:
             rospy.loginfo("Initializing subject "+model)
-            self.model_pub.update({model : { "odom_pub"         : rospy.Publisher(model+"/odom", nav_msgs.msg.Odometry, queue_size=100),
+            self.model_pub.update({model : { "odom_pub"         : rospy.Publisher("~"+model+"/odom", nav_msgs.msg.Odometry, queue_size=100),
                                              "odom_msg"         : nav_msgs.msg.Odometry(),
                                              "odom_child_tf"    : geometry_msgs.msg.TransformStamped(),
                                              "odom_child_tf_pub": tf2_ros.TransformBroadcaster(),
-                                             "pose_stamped_pub" : rospy.Publisher(model+"/pose", geometry_msgs.msg.PoseStamped, queue_size=100),
+                                             "pose_stamped_pub" : rospy.Publisher("~"+model+"/pose", geometry_msgs.msg.PoseStamped, queue_size=100),
                                              "pose_stamped_msg" : geometry_msgs.msg.PoseStamped(),
-                                             "vel_stamped_pub"  : rospy.Publisher(model+"/velocity", geometry_msgs.msg.TwistStamped, queue_size=100),
+                                             "vel_stamped_pub"  : rospy.Publisher("~"+model+"/velocity", geometry_msgs.msg.TwistStamped, queue_size=100),
                                              "vel_stamped_msg"  : geometry_msgs.msg.TwistStamped() }})
             #init message headers
             self.model_pub[model]["odom_msg"].header.frame_id = self.fixed_frame_id
