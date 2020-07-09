@@ -25,6 +25,13 @@ A vector of subjects of interest. Leave the vector empty if all subjects are to 
 LEAVING THE VECTOR EMPTY WILL ONLY TRACK NON-STATIC MODEL (according to the model properties in Gazebo). 
 
 
+**Subscribed Topics**
+
+`/gazebo/model_states` (`gazebo_msgs/ModelStates`)
+
+Used to get the model list from Gazebo if no model list parameter is specified.
+
+
 **Published Topics**
 
 `/{mocap_sys}/{subject_name}/odom` (`nav_msgs/Odometry`)
@@ -38,6 +45,13 @@ Twist message for each specified subject in `model_list` (relative to mocap fixe
 `/{mocap_sys}/{subject_name}/velocity` (`geometry_msgs/PoseStamped`)
 
 Pose message for each specified subject in `model_list` (relative to mocap fixed frame).
+
+
+**Called Services**
+
+`/gazebo/get_model_properties` (`gazebo/GetModelProperties`)
+
+Used to get the model properties when no model list parameter is specified. Models are added to the list if their "is_static" attribute is false.
 
 
 **Node**
