@@ -26,8 +26,9 @@ class MocapSimulatorNode:
         #Initialize node
         rospy.init_node('mocap_simulator_node')
 
-        rospy.loginfo("Mocap simulator node: waiting for Gazebo feedback...")
+        rospy.loginfo("Mocap simulator node: waiting for Gazebo feedback and for model to spawn...")
         rospy.wait_for_message("/gazebo/model_states", gazebo_msgs.msg.ModelStates)
+        rospy.sleep(2)
         self.prev_time = rospy.Time.now()
 
         #Get parameters from ROS param server
@@ -147,7 +148,7 @@ class MocapSimulatorNode:
                         self.model_pub[model]["odom_child_tf"].transform.translation.x = model_state_msg.pose[i].position.x
                         self.model_pub[model]["odom_child_tf"].transform.translation.y = model_state_msg.pose[i].position.y
                         self.model_pub[model]["odom_child_tf"].transform.translation.z = model_state_msg.pose[i].position.z
-                        self.model_pub[model]["odom_child_tf"].transform.rotation = model_state_msg.pose[i].orientation
+                        self.model_pub[model]["odom_child_tf"].transform.rotation = copy.copy(model_state_msg.pose[i].orientation)
                         
                         #Use the transform to get twist is the child frame (for odometry message)
                         self.model_pub[model]["odom_msg"].twist.twist = transform_twist(model_state_msg.twist[i], self.model_pub[model]["odom_child_tf"])
