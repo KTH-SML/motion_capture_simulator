@@ -82,9 +82,9 @@ class MocapSimulatorNode:
                                              "vel_stamped_msg"  : geometry_msgs.msg.TwistStamped() }})
             #init message headers
             self.model_pub[model]["odom_msg"].header.frame_id = self.fixed_frame_id
-            self.model_pub[model]["odom_msg"].child_frame_id = model + "/base_link"
+            self.model_pub[model]["odom_msg"].child_frame_id = model
             self.model_pub[model]["odom_child_tf"].header.frame_id = self.fixed_frame_id
-            self.model_pub[model]["odom_child_tf"].child_frame_id = model + "/base_link"
+            self.model_pub[model]["odom_child_tf"].child_frame_id = model
             self.model_pub[model]["pose_stamped_msg"].header.frame_id = self.fixed_frame_id
             self.model_pub[model]["vel_stamped_msg"].header.frame_id = self.fixed_frame_id
 
@@ -149,7 +149,7 @@ class MocapSimulatorNode:
                         self.model_pub[model]["odom_child_tf"].transform.translation.y = model_state_msg.pose[i].position.y
                         self.model_pub[model]["odom_child_tf"].transform.translation.z = model_state_msg.pose[i].position.z
                         self.model_pub[model]["odom_child_tf"].transform.rotation = copy.copy(model_state_msg.pose[i].orientation)
-                        
+
                         #Use the transform to get twist is the child frame (for odometry message)
                         self.model_pub[model]["odom_msg"].twist.twist = transform_twist(model_state_msg.twist[i], self.model_pub[model]["odom_child_tf"])
 
@@ -169,16 +169,18 @@ class MocapSimulatorNode:
 # Apply transform to a twist message 
 #     including angular velocity
 #=====================================
-def transform_twist(twist= geometry_msgs.msg.Twist, transform_stamped = geometry_msgs.msg.TransformStamped):
+def transform_twist(twist = geometry_msgs.msg.Twist, transform_stamped = geometry_msgs.msg.TransformStamped):
 
-    transform_stamped.transform.rotation.w = - transform_stamped.transform.rotation.w
+    transform_stamped_ = copy.deepcopy(transform_stamped)
+    #Inverse real-part of quaternion to inverse rotation
+    transform_stamped_.transform.rotation.w = - transform_stamped_.transform.rotation.w
 
     twist_vel = geometry_msgs.msg.Vector3Stamped()
     twist_rot = geometry_msgs.msg.Vector3Stamped()
     twist_vel.vector = twist.linear
     twist_rot.vector = twist.angular
-    out_vel = tf2_geometry_msgs.do_transform_vector3(twist_vel, transform_stamped)
-    out_rot = tf2_geometry_msgs.do_transform_vector3(twist_rot, transform_stamped)
+    out_vel = tf2_geometry_msgs.do_transform_vector3(twist_vel, transform_stamped_)
+    out_rot = tf2_geometry_msgs.do_transform_vector3(twist_rot, transform_stamped_)
 
     #Populate new twist message
     new_twist = geometry_msgs.msg.Twist()
